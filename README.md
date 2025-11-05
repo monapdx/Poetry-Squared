@@ -60,12 +60,7 @@ Just open `index.html` in your web browser — no build step required.
 
 
 
-| *I* | *write* | *soft* | *words* | *into* | *light* |
-| *write* |  |  |  |  |  |
-| *soft* |  |  |  |  |  |
-| *words* |  |  |  |  |  |
-| *into* |  |  |  |  |  |
-| *light* |  |  |  |  |  |
+<img src="https://raw.githubusercontent.com/monapdx/Poetry-Squared/refs/heads/main/grid-poem.gif" width="644">
 
 *(Each word appears across and down — forming linguistic symmetry.)*
 
