@@ -193,6 +193,18 @@ td.warning {
             <h3>It's <em>Harder</em> Than it Looks...</h3>
             
         <p><details><summary><mark> Click here to read one by Louis Carroll</mark></summary><img src="square-stanza.png"><p>Credit for this find goes to <em><a href="https://www.futilitycloset.com/2009/05/18/7669/">Futility Closet</a></em>!</p></details></p><hr>
+        
+        <div class="legend">
+  <span class="legend-item" style="background:#ffeb3b;padding:5px;">Pronoun</span>
+  <span class="legend-item" style="background:#f44336;color:#fff;padding:5px;">Noun</span>
+  <span class="legend-item" style="background:#2196f3;color:#fff;padding:5px;">Verb</span>
+  <span class="legend-item" style="background:#4caf50;color:#fff;padding:5px;">Adjective</span>
+  <span class="legend-item" style="background:#9c27b0;color:#fff;padding:5px;">Adverb</span>
+  <span class="legend-item" style="background:#00bcd4;color:#fff;padding:5px;">Preposition</span>
+  <span class="legend-item" style="background:#ff9800;color:#fff;padding:5px;">Conjunction</span>
+  <span class="legend-item" style="background:#e0e0e0;padding:5px;">Other</span>
+</div>
+
 
             <div class="container">
                 <p>Enter a six-word sentence to fill the grid.</p>
@@ -214,6 +226,14 @@ td.warning {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const wordInput = document.getElementById("wordInput");
+    // Live word limit: prevent more than six words
+    wordInput.addEventListener("input", () => {
+    const words = wordInput.value.trim().split(/\s+/).filter(Boolean);
+    if (words.length > 6) {
+        wordInput.value = words.slice(0, 6).join(" ");
+    }
+});
+
     const tableContainer = document.getElementById("table-container");
     const statusMessage = document.getElementById("statusMessage");
     let currentRow = 0;
@@ -236,28 +256,41 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- POS tagging helpers (using compromise.js) ---
 
     function getWordType(word) {
-        const doc = nlp(word);
-        if (doc.pronouns().length > 0) return "pronoun";
-        if (doc.nouns().length > 0) return "noun";
-        if (doc.verbs().length > 0) return "verb";
-        if (doc.adjectives().length > 0) return "adjective";
-        return "unknown";
-    }
+    const doc = nlp(word);
 
-    function getColorForWordType(wordType) {
-        switch (wordType) {
-            case "noun":
-                return "#f44336"; // red
-            case "verb":
-                return "#2196f3"; // blue
-            case "adjective":
-                return "#4caf50"; // green
-            case "pronoun":
-                return "#ffeb3b"; // yellow
-            default:
-                return "#ffffff"; // white / neutral
-        }
+    if (doc.pronouns().length > 0) return "pronoun";
+    if (doc.nouns().length > 0) return "noun";
+    if (doc.verbs().length > 0) return "verb";
+    if (doc.adjectives().length > 0) return "adjective";
+    if (doc.adverbs && doc.adverbs().length > 0) return "adverb";
+    if (doc.prepositions && doc.prepositions().length > 0) return "preposition";
+    if (doc.conjunctions && doc.conjunctions().length > 0) return "conjunction";
+
+    // fallback
+    return "other";
+}
+
+function getColorForWordType(wordType) {
+    switch (wordType) {
+        case "noun":
+            return "#f44336"; // red
+        case "verb":
+            return "#2196f3"; // blue
+        case "adjective":
+            return "#4caf50"; // green
+        case "pronoun":
+            return "#ffeb3b"; // yellow
+        case "adverb":
+            return "#9c27b0"; // purple
+        case "preposition":
+            return "#00bcd4"; // teal
+        case "conjunction":
+            return "#ff9800"; // orange
+        case "other":
+        default:
+            return "#e0e0e0"; // light grey for misc/unknown
     }
+}
 
     function fillCell(row, col, word) {
         const cell = document.querySelector(
