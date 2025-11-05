@@ -226,19 +226,11 @@ td.warning {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const wordInput = document.getElementById("wordInput");
-    // Live word limit: prevent more than six words
-    wordInput.addEventListener("input", () => {
-    const words = wordInput.value.trim().split(/\s+/).filter(Boolean);
-    if (words.length > 6) {
-        wordInput.value = words.slice(0, 6).join(" ");
-    }
-});
-
     const tableContainer = document.getElementById("table-container");
     const statusMessage = document.getElementById("statusMessage");
     let currentRow = 0;
 
-    // Build 6×6 grid
+    // Build a 6×6 grid
     function createTable() {
         const table = document.getElementById("wordGrid");
         for (let i = 0; i < 6; i++) {
@@ -253,44 +245,42 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- POS tagging helpers (using compromise.js) ---
-
+    // Part-of-speech detection using compromise
     function getWordType(word) {
-    const doc = nlp(word);
+        const doc = nlp(word);
 
-    if (doc.pronouns().length > 0) return "pronoun";
-    if (doc.nouns().length > 0) return "noun";
-    if (doc.verbs().length > 0) return "verb";
-    if (doc.adjectives().length > 0) return "adjective";
-    if (doc.adverbs && doc.adverbs().length > 0) return "adverb";
-    if (doc.prepositions && doc.prepositions().length > 0) return "preposition";
-    if (doc.conjunctions && doc.conjunctions().length > 0) return "conjunction";
+        if (doc.pronouns().length > 0) return "pronoun";
+        if (doc.nouns().length > 0) return "noun";
+        if (doc.verbs().length > 0) return "verb";
+        if (doc.adjectives().length > 0) return "adjective";
+        if (doc.adverbs && doc.adverbs().length > 0) return "adverb";
+        if (doc.prepositions && doc.prepositions().length > 0) return "preposition";
+        if (doc.conjunctions && doc.conjunctions().length > 0) return "conjunction";
 
-    // fallback
-    return "other";
-}
-
-function getColorForWordType(wordType) {
-    switch (wordType) {
-        case "noun":
-            return "#f44336"; // red
-        case "verb":
-            return "#2196f3"; // blue
-        case "adjective":
-            return "#4caf50"; // green
-        case "pronoun":
-            return "#ffeb3b"; // yellow
-        case "adverb":
-            return "#9c27b0"; // purple
-        case "preposition":
-            return "#00bcd4"; // teal
-        case "conjunction":
-            return "#ff9800"; // orange
-        case "other":
-        default:
-            return "#e0e0e0"; // light grey for misc/unknown
+        return "other";
     }
-}
+
+    function getColorForWordType(wordType) {
+        switch (wordType) {
+            case "noun":
+                return "#f44336"; // red
+            case "verb":
+                return "#2196f3"; // blue
+            case "adjective":
+                return "#4caf50"; // green
+            case "pronoun":
+                return "#ffeb3b"; // yellow
+            case "adverb":
+                return "#9c27b0"; // purple
+            case "preposition":
+                return "#00bcd4"; // teal
+            case "conjunction":
+                return "#ff9800"; // orange
+            case "other":
+            default:
+                return "#e0e0e0"; // light grey for misc/unknown
+        }
+    }
 
     function fillCell(row, col, word) {
         const cell = document.querySelector(
@@ -306,20 +296,29 @@ function getColorForWordType(wordType) {
         cell.dataset.pos = wordType;
         cell.style.backgroundColor = bgColor;
 
-        // Make sure text stays visible even on light backgrounds
-        if (bgColor === "#ffffff" || bgColor === "#ffeb3b") {
+        // Text color: dark on light backgrounds, white on strong colors
+        const lightBackgrounds = ["#ffffff", "#ffeb3b", "#e0e0e0"];
+        if (lightBackgrounds.includes(bgColor)) {
             cell.style.color = "#34495e";
         } else {
             cell.style.color = "#ffffff";
         }
     }
 
-    // Fill current row & column with a six-word sentence
+    // Live word limit: auto-truncate to 6 words
+    wordInput.addEventListener("input", () => {
+        const words = wordInput.value.trim().split(/\s+/).filter(Boolean);
+        if (words.length > 6) {
+            wordInput.value = words.slice(0, 6).join(" ");
+        }
+    });
+
+    // Add a six-word sentence to the next row/column
     function addSentence() {
         const sentence = wordInput.value.trim();
         const words = sentence.split(/\s+/).filter(Boolean);
 
-        if (words.length !== 6) {
+        if (words.length < 6) {
             alert("Please enter exactly six words.");
             return;
         }
@@ -330,7 +329,7 @@ function getColorForWordType(wordType) {
             return;
         }
 
-        // For row n: fill row n and column n with these same 6 words
+        // Fill row N and column N with the same six words
         for (let i = 0; i < 6; i++) {
             fillCell(currentRow, i, words[i]); // row
             fillCell(i, currentRow, words[i]); // column
@@ -345,7 +344,7 @@ function getColorForWordType(wordType) {
         }
     }
 
-    // Initial grid
+    // Build the table
     createTable();
 
     // Enter key submits the sentence
@@ -371,6 +370,7 @@ function getColorForWordType(wordType) {
     });
 });
 </script>
+
   
 </body>
 </html>
