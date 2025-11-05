@@ -1,5 +1,5 @@
 # 🌿 Poetry√  
-### *poetic symmatry*  
+### *poetic symmetry*  
 
 **Poetry√** is an experimental writing app for poets and language lovers who want to explore the structure and beauty of *square stanza poems* — an intricate poetic form where every word appears across both rows and columns in a 6×6 grid. The app combines language, logic, and design to help writers visualize and refine this challenging art form.
 
