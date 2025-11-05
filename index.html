@@ -155,7 +155,32 @@
         }
         
         a {text-decoration:none;}
+        
+        td {
+    border: 1px solid #ddd;
+    width: 16.66%;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #34495e;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+td.filled {
+    opacity: 1;
+    transform: scale(1);
+    color: #fff; /* Ensure text is readable against colored backgrounds */
+}
+
+td.warning {
+    border-color: red;
+}
+
     </style>
+ <script src="https://unpkg.com/compromise@14.14.4/builds/compromise.js"></script>
+   
 </head>
 <body>
     <header>
@@ -186,77 +211,133 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            let currentRow = 0;
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const wordInput = document.getElementById("wordInput");
+    const tableContainer = document.getElementById("table-container");
+    const statusMessage = document.getElementById("statusMessage");
+    let currentRow = 0;
 
-            function createTable() {
-                const table = document.getElementById("wordGrid");
-                for (let i = 0; i < 6; i++) {
-                    const row = document.createElement("tr");
-                    for (let j = 0; j < 6; j++) {
-                        const cell = document.createElement("td");
-                        cell.setAttribute("data-row", i);
-                        cell.setAttribute("data-col", j);
-                        row.appendChild(cell);
-                    }
-                    table.appendChild(row);
-                }
+    // Build 6×6 grid
+    function createTable() {
+        const table = document.getElementById("wordGrid");
+        for (let i = 0; i < 6; i++) {
+            const row = document.createElement("tr");
+            for (let j = 0; j < 6; j++) {
+                const cell = document.createElement("td");
+                cell.setAttribute("data-row", i);
+                cell.setAttribute("data-col", j);
+                row.appendChild(cell);
             }
+            table.appendChild(row);
+        }
+    }
 
-            function addSentence() {
-                const wordInput = document.getElementById("wordInput");
-                const sentence = wordInput.value.trim();
-                const words = sentence.split(" ");
+    // --- POS tagging helpers (using compromise.js) ---
 
-                if (words.length !== 6) {
-                    alert("Please enter exactly six words.");
-                    return;
-                }
+    function getWordType(word) {
+        const doc = nlp(word);
+        if (doc.pronouns().length > 0) return "pronoun";
+        if (doc.nouns().length > 0) return "noun";
+        if (doc.verbs().length > 0) return "verb";
+        if (doc.adjectives().length > 0) return "adjective";
+        return "unknown";
+    }
 
-                for (let i = 0; i < words.length; i++) {
-                    fillCell(currentRow, i, words[i]);
-                    fillCell(i, currentRow, words[i]);
-                }
+    function getColorForWordType(wordType) {
+        switch (wordType) {
+            case "noun":
+                return "#f44336"; // red
+            case "verb":
+                return "#2196f3"; // blue
+            case "adjective":
+                return "#4caf50"; // green
+            case "pronoun":
+                return "#ffeb3b"; // yellow
+            default:
+                return "#ffffff"; // white / neutral
+        }
+    }
 
-                currentRow++;
-                wordInput.value = "";
+    function fillCell(row, col, word) {
+        const cell = document.querySelector(
+            `td[data-row='${row}'][data-col='${col}']`
+        );
+        if (!cell) return;
 
-                if (currentRow === 6) {
-                    document.getElementById("statusMessage").textContent = "All cells filled!";
-                    wordInput.disabled = true;
-                }
-            }
+        const wordType = getWordType(word);
+        const bgColor = getColorForWordType(wordType);
 
-            function fillCell(row, col, word) {
-                const cell = document.querySelector(`td[data-row='${row}'][data-col='${col}']`);
-                cell.textContent = word;
-                cell.classList.add("filled");
-            }
+        cell.textContent = word;
+        cell.classList.add("filled");
+        cell.dataset.pos = wordType;
+        cell.style.backgroundColor = bgColor;
 
-            createTable();
+        // Make sure text stays visible even on light backgrounds
+        if (bgColor === "#ffffff" || bgColor === "#ffeb3b") {
+            cell.style.color = "#34495e";
+        } else {
+            cell.style.color = "#ffffff";
+        }
+    }
 
-            document.getElementById("wordInput").addEventListener("keydown", (event) => {
-                if (event.key === "Enter") {
-                    event.preventDefault();
-                    addSentence();
-                }
-            });
+    // Fill current row & column with a six-word sentence
+    function addSentence() {
+        const sentence = wordInput.value.trim();
+        const words = sentence.split(/\s+/).filter(Boolean);
 
-            document.getElementById("download").addEventListener("click", () => {
-                html2canvas(document.getElementById("table-container"), {
-    scale: 2, // Higher scale improves clarity
-    useCORS: true,
-    scrollY: -window.scrollY, // Captures the entire container even if overflowed
-}).then((canvas) => {
-    const link = document.createElement("a");
-    link.download = "grid-poem.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-});
+        if (words.length !== 6) {
+            alert("Please enter exactly six words.");
+            return;
+        }
 
-            });
+        if (currentRow >= 6) {
+            statusMessage.textContent = "All cells are already filled.";
+            wordInput.disabled = true;
+            return;
+        }
+
+        // For row n: fill row n and column n with these same 6 words
+        for (let i = 0; i < 6; i++) {
+            fillCell(currentRow, i, words[i]); // row
+            fillCell(i, currentRow, words[i]); // column
+        }
+
+        currentRow++;
+        wordInput.value = "";
+
+        if (currentRow === 6) {
+            statusMessage.textContent = "All cells filled!";
+            wordInput.disabled = true;
+        }
+    }
+
+    // Initial grid
+    createTable();
+
+    // Enter key submits the sentence
+    wordInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            addSentence();
+        }
+    });
+
+    // Export the grid as an image
+    document.getElementById("download").addEventListener("click", () => {
+        html2canvas(tableContainer, {
+            scale: 2,
+            useCORS: true,
+            scrollY: -window.scrollY
+        }).then((canvas) => {
+            const link = document.createElement("a");
+            link.download = "grid-poem.png";
+            link.href = canvas.toDataURL("image/png");
+            link.click();
         });
-    </script>
+    });
+});
+</script>
+  
 </body>
 </html>
