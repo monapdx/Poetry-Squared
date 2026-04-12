@@ -25,16 +25,6 @@
 
 ## 🚀 Getting Started  
 
-### 1. Clone this repository  
-```bash
-git clone https://github.com/yourusername/poetry-root.git
-cd poetry-root
-```
-
-### 2. Open the project  
-Just open `index.html` in your web browser — no build step required.  
-
----
 
 ## 🧠 How It Works  
 
