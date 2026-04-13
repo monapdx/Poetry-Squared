@@ -207,14 +207,20 @@ td.warning {
 
 
             <div class="container">
-                <p>Enter a six-word sentence to fill the grid.</p>
-                <input type="text" id="wordInput" placeholder="Type a six-word sentence">
+                <p>Enter a six-word sentence to fill the grid. Each word will be placed both horizontally and vertically.</p>
+                <h3>How to Use</h3>
+                <p>
+                1. Enter exactly six words<br>
+                2. Press Enter to add them to the grid<br>
+                3. Repeat for 6 lines to complete the poem
+                </p>
+                <input type="text" id="wordInput" placeholder="Example: Roses are red violets are blue">
                 <div id="table-container">
                     <table id="wordGrid"></table>
-                </div><p>Still struggling to write one that makes sense?</p>
+                </div><p>Still struggling? Try simple sentences with common words to start.</p>
                 <p><details><summary><mark>Click here to read my own attempt</mark></summary><img src="unnamed.png"></details>
                 <div id="statusMessage"></div>
-                <button id="download" class="cta-button">Save Your Poem!</button>
+                <button id="download" class="cta-button">Download Your Poem as Image</button>
             </div>
         </section>
     </main>

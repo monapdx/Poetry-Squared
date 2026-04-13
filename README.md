@@ -78,3 +78,15 @@ Contributions are welcome!
 ## 📜 License  
 
 MIT License © 2025 Ashly Lorenzana 
+## How to Use
+
+1. Enter your poem in the input box  
+2. Make sure each stanza has equal number of lines (square format)  
+3. Click generate to see the result  
+
+## Example
+
+Roses are red  
+Violets are blue  
+Sugar is sweet  
+And so are you  
