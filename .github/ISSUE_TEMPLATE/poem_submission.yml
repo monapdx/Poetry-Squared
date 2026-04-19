@@ -1,0 +1,92 @@
+name: 📝 Submit a Poem
+description: Submit a square poem for Poetry-Squared
+title: "[Poem]: "
+labels: ["poem submission", "creative"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sharing a poem with Poetry-Squared.
+
+        This project focuses on **square poems**: poems that read the same
+        horizontally and vertically. Use this form to submit an original poem
+        for consideration.
+
+  - type: input
+    id: poem_title
+    attributes:
+      label: Poem title
+      placeholder: e.g. "Echo Grid"
+    validations:
+      required: true
+
+  - type: input
+    id: author_name
+    attributes:
+      label: Author name
+      placeholder: Your name or preferred pen name
+    validations:
+      required: true
+
+  - type: dropdown
+    id: poem_size
+    attributes:
+      label: Poem size
+      description: How large is your square poem?
+      options:
+        - 2 x 2
+        - 3 x 3
+        - 4 x 4
+        - 5 x 5
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: poem_text
+    attributes:
+      label: Poem text
+      description: Enter your poem with one line per row
+      placeholder: |
+        ROSE
+        OCEAN
+        SOUND
+        EAGER
+        SNOWY
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: theme
+    attributes:
+      label: Theme or meaning
+      description: What is the poem about, or what inspired it?
+      placeholder: Briefly describe the idea, feeling, or image behind the poem
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes on construction (optional)
+      description: Share anything interesting about how you built it
+      placeholder: e.g. constraints, wordplay, revisions, intended reading experience
+
+  - type: input
+    id: website_or_link
+    attributes:
+      label: Personal link (optional)
+      placeholder: Website, social profile, or portfolio link
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Submission checklist
+      options:
+        - label: This is my original work, or I have permission to share it
+          required: true
+        - label: I understand this repository focuses on poems designed to work in a square format
+          required: true
+        - label: I am okay with this poem being featured in the project with attribution
+          required: true
