@@ -4,25 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Poetry Grid Helper</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            /* Neon palette */
+            --hot-pink: #FF2ECC;
+            --hot-pink-soft: #FF8DE1;
+            --cyan: #00E9F5;
+            --cyan-soft: #8FF7FC;
+            --lime: #B6FF00;
+            --lime-soft: #DCFF7A;
+            --heliotrope: #C46BFF;
+            --heliotrope-soft: #E4B8FF;
+
+            --ink: #111111;
+            --paper: #FDF7EE;
+
+            --border: 3px solid var(--ink);
+            --shadow-sm: 4px 4px 0 var(--ink);
+            --shadow-md: 6px 6px 0 var(--ink);
+            --shadow-lg: 10px 10px 0 var(--ink);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            font-family: 'Playfair Display', serif;
-            background-color: #fff;
-            color: #333;
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--paper);
+            /* Subtle dot grid, very Neo-Brutalist poster vibe */
+            background-image: radial-gradient(var(--ink) 1px, transparent 1px);
+            background-size: 28px 28px;
+            color: var(--ink);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
 
+        h1, h2, h3 {
+            font-family: 'Archivo Black', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+        }
+
         header {
-            background-color: transparent;
-            padding: 10px 20px;
-            border-bottom: 1px solid #e0e0e0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background-color: var(--heliotrope);
+            padding: 14px 20px;
+            border-bottom: var(--border);
         }
 
         main {
@@ -30,93 +61,184 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: clamp(16px, 3vw, 48px) clamp(12px, 4vw, 48px);
         }
 
         .product-info {
             background-color: #fff;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: clamp(20px, 4vw, 48px) clamp(16px, 4vw, 56px);
+            border: var(--border);
+            box-shadow: var(--shadow-lg);
             text-align: center;
+            width: min(100%, 1100px);
         }
 
         .product-info h2 {
-            margin-top: 0;
-            color: #007BFF;
-            font-weight: 700;
+            margin-top: 24px;
+            font-size: clamp(1.2em, 2.5vw, 1.8em);
+            background-color: var(--hot-pink);
+            display: inline-block;
+            padding: 10px 16px;
+            border: var(--border);
+            box-shadow: var(--shadow-sm);
+            transform: rotate(-1deg);
+        }
+
+        .product-info h3 {
+            font-size: 1.1em;
         }
 
         .product-info p {
-            font-size: 1.2em;
-            color: #666;
+            font-size: 1.1em;
             line-height: 1.6;
+            max-width: 65ch;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .cta-button {
-            background-color: #FFD700;
-            color: #000;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1em;
-            border-radius: 5px;
+        mark {
+            background-color: var(--lime);
+            border: 2px solid var(--ink);
+            padding: 3px 8px;
+            font-weight: 700;
+            box-shadow: 3px 3px 0 var(--ink);
+            display: inline-block;
             cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s;
         }
 
-        .cta-button:hover {
-            background-color: #e5c100;
+        summary {
+            cursor: pointer;
+            list-style: none;
         }
 
-        footer {
-            background-color: #fff;
-            padding: 20px;
-            text-align: center;
-            border-top: 1px solid #e0e0e0;
+        details img {
+            max-width: 100%;
+            border: var(--border);
+            box-shadow: var(--shadow-md);
+            margin-top: 16px;
         }
 
-        footer p {
-            margin: 0;
-            color: #999;
-            font-size: 0.9em;
+        hr {
+            border: none;
+            border-top: var(--border);
+            margin: 28px 0;
         }
+
+        a {
+            color: var(--ink);
+            font-weight: 700;
+            text-decoration: none;
+            border-bottom: 3px solid var(--hot-pink);
+        }
+
+        a:hover {
+            background-color: var(--cyan-soft);
+        }
+
+        /* Product Hunt badge */
+        .ph-badge {
+            border-bottom: none;
+            display: inline-block;
+        }
+
+        .ph-badge:hover {
+            background: none;
+        }
+
+        .ph-badge img {
+            border: var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Part-of-speech legend */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 24px 0;
+        }
+
+        .legend-item {
+            padding: 6px 12px;
+            border: 2px solid var(--ink);
+            box-shadow: 3px 3px 0 var(--ink);
+            font-weight: 700;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--ink);
+        }
+
+        .legend-item.pronoun     { background-color: var(--hot-pink-soft); }
+        .legend-item.noun        { background-color: var(--hot-pink); }
+        .legend-item.verb        { background-color: var(--cyan); }
+        .legend-item.adjective   { background-color: var(--lime); }
+        .legend-item.adverb      { background-color: var(--heliotrope); }
+        .legend-item.preposition { background-color: var(--cyan-soft); }
+        .legend-item.conjunction { background-color: var(--lime-soft); }
+        .legend-item.other       { background-color: var(--paper); }
 
         .container {
             text-align: center;
             width: 100%;
-            max-width: 600px;
             margin: 0 auto;
         }
 
         #wordInput {
             width: 100%;
-            max-width: 500px;
-            padding: 10px;
+            max-width: 640px;
+            padding: 14px 16px;
             font-size: 16px;
-            margin-bottom: 20px;
-            border: 2px solid #3498db;
-            border-radius: 4px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            margin-bottom: 28px;
+            border: var(--border);
+            border-radius: 0;
             outline: none;
-            transition: border-color 0.3s ease;
+            background-color: #fff;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.1s ease, transform 0.1s ease;
         }
 
         #wordInput:focus {
-            border-color: #2980b9;
+            background-color: var(--cyan-soft);
+            transform: translate(-2px, -2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        #wordInput:disabled {
+            background-color: var(--lime-soft);
+        }
+
+        #wordInput::placeholder {
+            color: #555;
         }
 
         #statusMessage {
             margin-top: 20px;
             font-size: 18px;
-            color: #2c3e50;
+            font-weight: 700;
+            text-transform: uppercase;
         }
-        
-        #table-container {
-    width: auto;
-    height: auto;
-    overflow: visible;
-}
 
+        #statusMessage:not(:empty) {
+            display: inline-block;
+            background-color: var(--lime);
+            border: var(--border);
+            box-shadow: var(--shadow-sm);
+            padding: 8px 16px;
+        }
+
+        #table-container {
+            width: min(100%, 760px);
+            height: auto;
+            overflow: visible;
+            margin: 0 auto;
+            border: var(--border);
+            box-shadow: var(--shadow-md);
+            background-color: #fff;
+        }
 
         table {
             width: 100%;
@@ -124,60 +246,95 @@
             text-align: center;
             margin: 0 auto;
             background-color: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #34495e;
+            border: 2px solid var(--ink);
+            width: 16.66%;
+            padding: clamp(6px, 1.5vw, 16px) clamp(4px, 1vw, 12px);
+            font-size: clamp(13px, 2vw, 20px);
+            font-weight: 700;
+            color: var(--ink);
             transition: transform 0.3s ease, opacity 0.3s ease;
-            opacity: 0;
+            opacity: 0.35;
             transform: scale(0.8);
             white-space: nowrap;
-    overflow: visible;
-    text-align: center;
+            overflow: visible;
+            text-align: center;
         }
 
         td.filled {
             opacity: 1;
             transform: scale(1);
         }
-        td.unique {background:cyan;}
+
+        td.unique {
+            background: var(--cyan);
+        }
+
+        td.warning {
+            border-color: var(--hot-pink);
+            border-width: 3px;
+        }
+
+        .cta-button {
+            font-family: 'Archivo Black', sans-serif;
+            background-color: var(--hot-pink);
+            color: var(--ink);
+            border: var(--border);
+            border-radius: 0;
+            padding: 16px 30px;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            margin-top: 24px;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+        }
+
+        .cta-button:hover {
+            background-color: var(--cyan);
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0 var(--ink);
+        }
+
+        .cta-button:active {
+            transform: translate(4px, 4px);
+            box-shadow: 2px 2px 0 var(--ink);
+        }
+
+        footer {
+            background-color: var(--ink);
+            color: var(--paper);
+            padding: 20px;
+            text-align: center;
+            border-top: var(--border);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9em;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
 
         @media (max-width: 600px) {
-            td {
-                font-size: 16px;
-                padding: 5px;
+            .legend {
+                gap: 8px;
+            }
+
+            .legend-item {
+                font-size: 0.75em;
+                padding: 4px 8px;
+            }
+
+            .cta-button {
+                width: 100%;
+                padding: 14px 16px;
             }
         }
-        
-        a {text-decoration:none;}
-        
-        td {
-    border: 1px solid #ddd;
-    width: 16.66%;
-    padding: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #34495e;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    opacity: 0;
-    transform: scale(0.8);
-}
-
-td.filled {
-    opacity: 1;
-    transform: scale(1);
-    color: #fff; /* Ensure text is readable against colored backgrounds */
-}
-
-td.warning {
-    border-color: red;
-}
-
     </style>
  <script src="https://unpkg.com/compromise@14.14.4/builds/compromise.js"></script>
    
@@ -187,7 +344,7 @@ td.warning {
         <!-- Header Content (if needed) -->
     </header>
     <main>
-        <section class="product-info"><a href="https://www.producthunt.com/posts/poetry-grid-helper?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-poetry&#0045;grid&#0045;helper" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=727103&theme=light" alt="Poetry&#0032;Grid&#0032;Helper - Write&#0032;a&#0032;Poem&#0032;That&#0032;Reads&#0032;The&#0032;Same&#0032;Both&#0032;Directions | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+        <section class="product-info"><a class="ph-badge" href="https://www.producthunt.com/posts/poetry-grid-helper?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-poetry&#0045;grid&#0045;helper" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=727103&theme=light" alt="Poetry&#0032;Grid&#0032;Helper - Write&#0032;a&#0032;Poem&#0032;That&#0032;Reads&#0032;The&#0032;Same&#0032;Both&#0032;Directions | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
             <h2>Can You Write a Poem That Reads The Same Both Horizontally and Vertically?</h2>
            
             <h3>It's <em>Harder</em> Than it Looks...</h3>
@@ -195,14 +352,14 @@ td.warning {
         <p><details><summary><mark> Click here to read one by Louis Carroll</mark></summary><img src="square-stanza.png"><p>Credit for this find goes to <em><a href="https://www.futilitycloset.com/2009/05/18/7669/">Futility Closet</a></em>!</p></details></p><hr>
         
         <div class="legend">
-  <span class="legend-item" style="background:#ffeb3b;padding:5px;">Pronoun</span>
-  <span class="legend-item" style="background:#f44336;color:#fff;padding:5px;">Noun</span>
-  <span class="legend-item" style="background:#2196f3;color:#fff;padding:5px;">Verb</span>
-  <span class="legend-item" style="background:#4caf50;color:#fff;padding:5px;">Adjective</span>
-  <span class="legend-item" style="background:#9c27b0;color:#fff;padding:5px;">Adverb</span>
-  <span class="legend-item" style="background:#00bcd4;color:#fff;padding:5px;">Preposition</span>
-  <span class="legend-item" style="background:#ff9800;color:#fff;padding:5px;">Conjunction</span>
-  <span class="legend-item" style="background:#e0e0e0;padding:5px;">Other</span>
+  <span class="legend-item pronoun">Pronoun</span>
+  <span class="legend-item noun">Noun</span>
+  <span class="legend-item verb">Verb</span>
+  <span class="legend-item adjective">Adjective</span>
+  <span class="legend-item adverb">Adverb</span>
+  <span class="legend-item preposition">Preposition</span>
+  <span class="legend-item conjunction">Conjunction</span>
+  <span class="legend-item other">Other</span>
 </div>
 
 
@@ -266,25 +423,26 @@ document.addEventListener("DOMContentLoaded", () => {
         return "other";
     }
 
+    // Neon Neo-Brutalist palette (matches the .legend-item swatches)
     function getColorForWordType(wordType) {
         switch (wordType) {
             case "noun":
-                return "#f44336"; // red
+                return "#FF2ECC"; // hot pink / magenta
             case "verb":
-                return "#2196f3"; // blue
+                return "#00E9F5"; // aqua / cyan
             case "adjective":
-                return "#4caf50"; // green
-            case "pronoun":
-                return "#ffeb3b"; // yellow
+                return "#B6FF00"; // electric lime
             case "adverb":
-                return "#9c27b0"; // purple
+                return "#C46BFF"; // heliotrope purple
+            case "pronoun":
+                return "#FF8DE1"; // soft hot pink
             case "preposition":
-                return "#00bcd4"; // teal
+                return "#8FF7FC"; // soft cyan
             case "conjunction":
-                return "#ff9800"; // orange
+                return "#DCFF7A"; // soft lime
             case "other":
             default:
-                return "#e0e0e0"; // light grey for misc/unknown
+                return "#FDF7EE"; // paper
         }
     }
 
@@ -302,13 +460,8 @@ document.addEventListener("DOMContentLoaded", () => {
         cell.dataset.pos = wordType;
         cell.style.backgroundColor = bgColor;
 
-        // Text color: dark on light backgrounds, white on strong colors
-        const lightBackgrounds = ["#ffffff", "#ffeb3b", "#e0e0e0"];
-        if (lightBackgrounds.includes(bgColor)) {
-            cell.style.color = "#34495e";
-        } else {
-            cell.style.color = "#ffffff";
-        }
+        // Neon fills are bright, so black ink stays readable everywhere
+        cell.style.color = "#111111";
     }
 
     // Live word limit: auto-truncate to 6 words
